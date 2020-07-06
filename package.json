@@ -1,0 +1,24 @@
+{
+  "name": "@docusaurus/plugin-lint-api",
+  "version": "2.0.0-alpha.58",
+  "description": "A lint for API docs",
+  "main": "src/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "commander": "^5.1.0",
+    "markdownlint": "^0.20.4"
+  },
+  "bin": {
+    "docusaurus-checker": "./bin/checker.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=10.15.1"
+  },
+  "dependencies": {
+    "globby": "^11.0.1",
+    "markdownlint-rule-helpers": "^0.11.0"
+  }
+}

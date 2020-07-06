@@ -1,0 +1,7 @@
+{
+  "comment": "Rules for the Docusaurus website",
+  "default": false,
+  "enforce-structure": {
+    "regex": "^(h4)((p)+(code)+)+$"
+  }
+}
