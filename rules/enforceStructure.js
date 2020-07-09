@@ -15,21 +15,21 @@ module.exports = {
   tags: ['md', 'structure'],
   function: function rule(params, onError) {
     const {config, tokens, lines, frontMatterLines} = params;
-    const {regex = '^(h3)((p)+(code)+)+$'} = config || {};
+    const {regex = '(h3)((p)+(code)+)+'} = config || {};
 
-    const context = createContext(tokens);
-    /*const [isStructureInvalid, ..._] = context.tokens.filter(
-      (item) => !item.structure.match(new RegExp(regex)),
-    );
-
-    if(isStructureInvalid){
-      const firstToken = isStructureInvalid.tokens[0];
-
-      onError({
-        lineNumber: firstToken.lineNumber,
-        detail: `This section is not following the recommended structure ${regex}`,
-        context: firstToken.line.substr(0, 7),
+    const context = createContext(tokens, frontMatterLines);
+    console.log(context);
+    /*context.children.forEach((section) => {
+      const valid = section.children.filter(
+        (child) => child.node.type === 'heading_open',
+      );
+      valid.map((child) => {
+        const leafs = child.children
+          .filter((b) => !b.node.type.match('close|inline'))
+          .map((a) => a.node.tag);
+        const a = leafs.join('');
+        return a.match(new RegExp('((p)+(code)+)+'));
       });
-    }*/
+    });*/
   },
 };

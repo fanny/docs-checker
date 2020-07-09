@@ -12,71 +12,51 @@ const path = require('path');
 const CONSTANTS = require(path.resolve(__dirname, './constants.js'));
 const {TOKENS_TYPE, TOKENS_TAG} = CONSTANTS;
 
-// TODO: More descriptive name
-function getSectionsIndexes(tokens) {
-  const headingLevels = [...Array(6).keys()];
-  let sectionsIndexes = [];
-  let idx = 0;
+function getLeaf(currentNode, node) {
+  const [lastChildCurrentNode] = currentNode.children.slice(-1);
+  if (lastChildCurrentNode && !lastChildCurrentNode.children.slice(-1).length) {
+    if (lastChildCurrentNode.node.type === TOKENS_TYPE.HEADING_OPEN) {
+      return lastChildCurrentNode;
+    } else {
+      return currentNode;
+    }
+  } else if (!lastChildCurrentNode) return currentNode;
+  else {
+    const lastChildHLevel =
+      lastChildCurrentNode &&
+      lastChildCurrentNode.hLevel &&
+      parseInt(lastChildCurrentNode.hLevel.slice(-1)[0]);
+    const nodeHLevel = node.hLevel && parseInt(node.hLevel.slice(-1)[0]);
 
-  const teste = [{
-    section: 'initial',
-    children: []
-  }]
-
-  // parse levels: why this code?
-  while (!sectionsIndexes.length && idx < headingLevels.length) {
-    idx += 1;
-    const sectionsbyLevelIndexes = tokens
-      .map((token, index) => {
-        const isSection =
-          token.tag === `h${idx}` && token.type === TOKENS_TYPE.HEADING_OPEN;
-        return isSection ? index : null;
-      })
-      .filter((index) => index !== null);
-    if (sectionsbyLevelIndexes.length > 0)
-      sectionsIndexes = sectionsbyLevelIndexes;
+    if (!nodeHLevel || !lastChildHLevel || nodeHLevel > lastChildHLevel) {
+      return getLeaf(lastChildCurrentNode, node);
+    } else {
+      return currentNode;
+    }
   }
-
-  return sectionsIndexes;
 }
 
 function createSubTree(tokens, currentSection) {
-  const parsedTokens = tokens.map((token, idx) => {
-    const nestedChildren = tokens.slice(idx + 1);
-    return {
-      hLevel: token.tag,
-      parent: currentSection,
+  const parsedTokens = tokens.forEach((token, idx) => {
+    const node = {
+      hLevel: token.type === TOKENS_TYPE.HEADING_OPEN ? token.tag : null,
       node: token,
-      children:
-        token.type !== TOKENS_TYPE.HEADING_OPEN
-          ? []
-          : createSubTree(nestedChildren, token),
+      children: [],
     };
+
+    const lastChild = getLeaf(currentSection, node);
+    lastChild.children.push(node);
   });
-  return parsedTokens;
 }
 
-function createContext(tokens) {
-  const sectionIndexes = getSectionsIndexes(tokens);
-  const tree = [];
-  const teste = sectionIndexes[0];
-  console.log('Heyy', tokens.slice(0, teste))
-  for (let i = 0; i < sectionIndexes.length; i += 1) {
-    const currentSection = sectionIndexes[i];
-    const nextSection = sectionIndexes[i + 1];
-    const children = tokens.slice(currentSection + 1, nextSection);
-    const currentNode = tokens[currentSection];
-
-    const rootChildren = createSubTree(children, currentNode);
-    const sectionRoot = {
-      hLevel: currentNode.tag,
-      parent: null,
-      node: currentNode,
-      children: rootChildren,
-    };
-    tree.push(sectionRoot);
-  }
-  //console.log(tree);
+function createContext(tokens, frontMatter) {
+  const tree = {
+    hLevel: 'h1',
+    node: frontMatter[2],
+    children: [],
+  };
+  createSubTree(tokens, tree);
+  return tree;
 }
 
 module.exports = {
