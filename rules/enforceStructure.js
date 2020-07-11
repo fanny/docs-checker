@@ -9,27 +9,35 @@ const path = require('path');
 
 const {createContext} = require(path.resolve(__dirname, '../parser'));
 
+function iterateOverSections(structure, currentNode, onError){
+  const {children, hLevel} = currentNode;
+  const validTokens = Object.keys(structure[hLevel]);
+  const subsections = children.filter((child) => child.hLevel);
+  const invalid = children.filter((child) => !child.node.type.match('close|inline')).find((child) => !validTokens.includes(child.node.tag) && (child.node.tag !== ''))
+
+
+  if(invalid) {
+    onError({
+      "lineNumber": invalid.node.lineNumber,
+      "detail": "Bla bla bla",
+      "context": invalid.node.line.substr(0, 7)
+    });
+  }
+
+  subsections.forEach((subSection) => {
+    iterateOverSections(structure, subSection, onError);
+  });
+}
+
 module.exports = {
   names: ['enforce-structure'],
   description: 'Enforces the structure of a .md file',
   tags: ['md', 'structure'],
   function: function rule(params, onError) {
     const {config, tokens, lines, frontMatterLines} = params;
-    const {regex = '(h3)((p)+(code)+)+'} = config || {};
+    const {structure} = config || {};
 
     const context = createContext(tokens, frontMatterLines);
-    console.log(context);
-    /*context.children.forEach((section) => {
-      const valid = section.children.filter(
-        (child) => child.node.type === 'heading_open',
-      );
-      valid.map((child) => {
-        const leafs = child.children
-          .filter((b) => !b.node.type.match('close|inline'))
-          .map((a) => a.node.tag);
-        const a = leafs.join('');
-        return a.match(new RegExp('((p)+(code)+)+'));
-      });
-    });*/
+    iterateOverSections(structure, context, onError);
   },
 };

@@ -37,6 +37,7 @@ function getLeaf(currentNode, node) {
 }
 
 function createSubTree(tokens, currentSection) {
+  const tree = {...currentSection};
   const parsedTokens = tokens.forEach((token, idx) => {
     const node = {
       hLevel: token.type === TOKENS_TYPE.HEADING_OPEN ? token.tag : null,
@@ -44,18 +45,19 @@ function createSubTree(tokens, currentSection) {
       children: [],
     };
 
-    const lastChild = getLeaf(currentSection, node);
-    lastChild.children.push(node);
+    const lastChild = getLeaf(tree, node);
+    tree.children.push(node);
   });
+  return tree;
 }
 
 function createContext(tokens, frontMatter) {
-  const tree = {
+  const rootSection = {
     hLevel: 'h1',
     node: frontMatter[2],
     children: [],
   };
-  createSubTree(tokens, tree);
+  const tree = createSubTree(tokens, rootSection);
   return tree;
 }
 
