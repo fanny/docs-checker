@@ -9,18 +9,21 @@ const path = require('path');
 
 const {createContext} = require(path.resolve(__dirname, '../parser'));
 
-function iterateOverSections(structure, currentNode, onError){
+function iterateOverSections(structure, currentNode, onError) {
   const {children, hLevel} = currentNode;
   const validTokens = Object.keys(structure[hLevel]);
   const subsections = children.filter((child) => child.hLevel);
-  const invalid = children.filter((child) => !child.node.type.match('close|inline')).find((child) => !validTokens.includes(child.node.tag) && (child.node.tag !== ''))
+  const invalid = children
+    .filter((child) => !child.node.type.match('close|inline'))
+    .find(
+      (child) => !validTokens.includes(child.node.tag) && child.node.tag !== '',
+    );
 
-
-  if(invalid) {
+  if (invalid) {
     onError({
-      "lineNumber": invalid.node.lineNumber,
-      "detail": "Bla bla bla",
-      "context": invalid.node.line.substr(0, 7)
+      lineNumber: invalid.node.lineNumber,
+      detail: 'Bla bla bla',
+      context: invalid.node.line.substr(0, 7),
     });
   }
 
