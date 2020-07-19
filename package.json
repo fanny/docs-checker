@@ -9,7 +9,7 @@
     "markdownlint": "^0.20.4"
   },
   "bin": {
-    "docs-checker": "./bin/checker.js"
+    "docs-checker": "babel-node ./bin/checker.js"
   },
   "publishConfig": {
     "access": "public"
@@ -18,6 +18,9 @@
     "node": ">=10.15.1"
   },
   "dependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
     "globby": "^11.0.1",
     "markdownlint-rule-helpers": "^0.11.0"
   }
