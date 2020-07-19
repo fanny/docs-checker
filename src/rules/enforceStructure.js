@@ -11,7 +11,10 @@ const {createContext} = require(path.resolve(__dirname, '../parser'));
 
 function iterateOverSections(structure, currentNode, onError) {
   const {children, hLevel} = currentNode;
-  const validTokens = Object.keys(structure[hLevel]);
+  const validTokens = Object.entries(structure[hLevel])
+    .filter(([key, value]) => value !== 'optional')
+    .map(([key, _]) => key);
+
   const subsections = children.filter((child) => child.hLevel);
   const invalid = children
     .filter((child) => !child.node.type.match('close|inline'))
@@ -26,7 +29,7 @@ function iterateOverSections(structure, currentNode, onError) {
       context: invalid.node.line.substr(0, 7),
     });
   }
-  console.log(invalid);
+
   subsections.forEach((subSection) => {
     iterateOverSections(structure, subSection, onError);
   });
