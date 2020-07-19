@@ -24,13 +24,12 @@ function isNestedChild(parentHLevel, nodeHLevel) {
   return !parentHLevel || !nodeHLevel || nodeHLevel > parentHLevel;
 }
 
-
 /**
  * This method receives the current node (initially the root) and the node to be added
  * First, it will be check if the current node has a children, if not, it will be the parent
- * Second, in case of the parent has a children, get the last child leaf, and check if it's a section,
+ * Second, in case of the parent has a children, check if it's leaf, if true, check if it's a section,
  * the parent section should be the nearest, so return the subsection, otherwise the current node
- * Third, if the parent child is not a leaf, we need to check if it's necessary keeping iterating,
+ * Third, if the child is not a leaf, we need to check if it's necessary keeping iterating,
  * so, we check the level of the current node, in case of the node to be added has a level greater than
  * the current node, we should keep searching otherwise we just return the current node.
  */
