@@ -36,14 +36,16 @@ function isNestedChild(parentHLevel, nodeHLevel) {
 function getParent(currentNode, node) {
   const [lastChild] = currentNode.children.slice(-1);
   if (!lastChild) {
+
     return currentNode;
   } else if (isLeaf(lastChild)) {
+
     return isSubSection(lastChild) ? lastChild : currentNode;
   } else {
     const lastChildHLevel =
       lastChild && lastChild.hLevel && parseInt(lastChild.hLevel.slice(-1)[0]);
-
     const nodeHLevel = node.hLevel && parseInt(node.hLevel.slice(-1)[0]);
+
     return isNestedChild(lastChild, nodeHLevel)
       ? getParent(lastChild, node)
       : currentNode;
