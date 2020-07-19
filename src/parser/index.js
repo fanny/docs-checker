@@ -12,27 +12,33 @@ const path = require('path');
 const CONSTANTS = require(path.resolve(__dirname, './constants.js'));
 const {TOKENS_TYPE, TOKENS_TAG} = CONSTANTS;
 
-function getLeaf(currentNode, node) {
-  const [lastChildCurrentNode] = currentNode.children.slice(-1);
-  if (lastChildCurrentNode && !lastChildCurrentNode.children.slice(-1).length) {
-    if (lastChildCurrentNode.node.type === TOKENS_TYPE.HEADING_OPEN) {
-      return lastChildCurrentNode;
-    } else {
-      return currentNode;
-    }
-  } else if (!lastChildCurrentNode) return currentNode;
-  else {
+function isLeaf(node){
+  return node && !node.children.length
+}
+
+function isSubSection(child){
+  return child.node.type === TOKENS_TYPE.HEADING_OPEN;
+}
+
+function isNestedChild(parentHLevel, nodeHLevel) {
+  return !parentHLevel || !nodeHLevel || nodeHLevel > parentHLevel;
+}
+
+function getParent(currentNode, node) {
+  const [lastChild] = currentNode.children.slice(-1);
+  if (isLeaf(lastChild)) {
+    return isSubSection(lastChild) ? lastChild : currentNode;
+  } else if (!lastChild) {
+    return currentNode;
+  } else {
     const lastChildHLevel =
-      lastChildCurrentNode &&
-      lastChildCurrentNode.hLevel &&
-      parseInt(lastChildCurrentNode.hLevel.slice(-1)[0]);
+      lastChild && lastChild.hLevel && parseInt(lastChild.hLevel.slice(-1)[0]);
+
     const nodeHLevel = node.hLevel && parseInt(node.hLevel.slice(-1)[0]);
 
-    if (!nodeHLevel || !lastChildHLevel || nodeHLevel > lastChildHLevel) {
-      return getLeaf(lastChildCurrentNode, node);
-    } else {
-      return currentNode;
-    }
+    return isNestedChild(lastChild, nodeHLevel)
+      ? getParent(lastChild, node)
+      : currentNode;
   }
 }
 
@@ -45,7 +51,7 @@ function createSubTree(tokens, currentSection) {
       children: [],
     };
 
-    const lastChild = getLeaf(tree, node);
+    const lastChild = getParent(tree, node);
     tree.children.push(node);
   });
   return tree;
