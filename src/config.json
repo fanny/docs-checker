@@ -14,5 +14,9 @@
         }
       }
     }
+  },
+  "before-after-section": {
+    "title": "API",
+    "before": "Configuration"
   }
 }

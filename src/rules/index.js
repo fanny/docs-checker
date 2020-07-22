@@ -11,4 +11,9 @@ const enforceStructure = require(path.resolve(
   './enforceStructure.js',
 ));
 
-module.exports = [enforceStructure];
+const beforeOrAfterSection = require(path.resolve(
+  __dirname,
+  './beforeOrAfterSection.js',
+));
+
+module.exports = [enforceStructure, beforeOrAfterSection];
