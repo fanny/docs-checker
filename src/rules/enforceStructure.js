@@ -9,7 +9,7 @@ const path = require('path');
 
 const {createContext} = require(path.resolve(__dirname, '../parser'));
 
-function iterateOverSections(structure, currentNode, onError) {
+function transverseTree(structure, currentNode, onError) {
   const {children, hLevel} = currentNode;
   const validTokens = Object.entries(structure[hLevel])
     .filter(([key, value]) => value !== 'optional')
@@ -19,19 +19,21 @@ function iterateOverSections(structure, currentNode, onError) {
   const invalid = children
     .filter((child) => !child.node.type.match('close|inline'))
     .find(
-      (child) => !validTokens.includes(child.node.tag) && child.node.tag !== '',
+      (child) => {
+        return !validTokens.includes(child.node.tag) && child.node.tag !== ''
+      }
     );
 
   if (invalid) {
     onError({
       lineNumber: invalid.node.lineNumber,
-      detail: 'Bla bla bla',
+      detail: 'Your section is not following the recommended structure',
       context: invalid.node.line.substr(0, 7),
     });
   }
 
   subsections.forEach((subSection) => {
-    iterateOverSections(structure, subSection, onError);
+    transverseTree(structure[hLevel], subSection, onError);
   });
 }
 
@@ -44,6 +46,6 @@ module.exports = {
     const {structure} = config || {};
 
     const context = createContext(tokens, frontMatterLines);
-    iterateOverSections(structure, context, onError);
+    transverseTree(structure, context, onError);
   },
 };
