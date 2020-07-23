@@ -6,35 +6,36 @@
  */
 const path = require('path');
 
-const enforceStructure = require(path.resolve(
+const requireStructure = require(path.resolve(
   __dirname,
-  './enforceStructure.js',
+  './requireStructure.js',
 ));
 
-const beforeSection = require(path.resolve(
+const requireSectionBefore = require(path.resolve(
   __dirname,
-  './beforeSection.js',
+  './requireSectionBefore.js',
 ));
 
-const afterSection = require(path.resolve(
+
+const requireSectionAfter = require(path.resolve(
   __dirname,
-  './afterSection.js',
+  './requireSectionAfter.js',
 ));
 
-const timeLecture = require(path.resolve(
+const noLongSections = require(path.resolve(
   __dirname,
-  './timeLecture.js',
+  './noLongSections.js',
 ));
 
-const codeLinks = require(path.resolve(
+const requireLinkInCodeSignature = require(path.resolve(
   __dirname,
-  './codeLinks.js',
+  './requireLinkInCodeSignature.js',
 ));
 
 module.exports = [
-  enforceStructure,
-  beforeSection,
-  afterSection,
-  timeLecture,
-  codeLinks
+  requireStructure,
+  requireSectionBefore,
+  requireSectionAfter,
+  noLongSections,
+  requireLinkInCodeSignature
 ];

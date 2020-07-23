@@ -14,7 +14,7 @@ function transverseTree(config, currentNode, onError) {
   const subsections = children.filter((child) => child.hLevel);
 
   // If after key was not defined in config, the section should be the last
-  if (!config.after.length) {
+  if (!config.next.length) {
     const [lastSection] = subsections.slice(-1);
     if (!lastSection || !lastSection.node.line.includes(config.section)) {
       onError({
@@ -47,7 +47,7 @@ function transverseTree(config, currentNode, onError) {
 
 module.exports = {
   names: ['require-section-after'],
-  description: 'After a section',
+  description: 'Enforce that a section should be after the specified.',
   tags: ['md', 'config'],
   function: function rule(params, onError) {
     const {config, tokens, frontMatterLines} = params;
