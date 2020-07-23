@@ -11,9 +11,30 @@ const enforceStructure = require(path.resolve(
   './enforceStructure.js',
 ));
 
-const beforeOrAfterSection = require(path.resolve(
+const beforeSection = require(path.resolve(
   __dirname,
-  './beforeOrAfterSection.js',
+  './beforeSection.js',
 ));
 
-module.exports = [enforceStructure, beforeOrAfterSection];
+const afterSection = require(path.resolve(
+  __dirname,
+  './afterSection.js',
+));
+
+const timeLecture = require(path.resolve(
+  __dirname,
+  './timeLecture.js',
+));
+
+const codeLinks = require(path.resolve(
+  __dirname,
+  './codeLinks.js',
+));
+
+module.exports = [
+  enforceStructure,
+  beforeSection,
+  afterSection,
+  timeLecture,
+  codeLinks
+];

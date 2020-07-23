@@ -70,7 +70,23 @@ function createSubTree(tokens, currentSection) {
 function createContext(tokens, frontMatter) {
   const rootSection = {
     hLevel: 'h1',
-    node: frontMatter[2],
+    node: {
+      type: 'heading_open',
+      tag: 'h1',
+      attrs: null,
+      map: [ 1 ],
+      nesting: 1,
+      level: 0,
+      children: null,
+      content: '',
+      markup: '##',
+      info: '',
+      meta: null,
+      block: true,
+      hidden: false,
+      line: frontMatter[2],
+      lineNumber: 1
+    },
     children: [],
   };
   const tree = createSubTree(tokens, rootSection);

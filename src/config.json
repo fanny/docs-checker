@@ -15,8 +15,16 @@
       }
     }
   },
-  "before-after-section": {
-    "title": "API",
-    "before": "Configuration"
+  "before-section": {
+    "title": "@build-tracker/api-client",
+    "before": ""
+  },
+  "after-section": {
+    "title": "Bla",
+    "after": ""
+  },
+  "time-lecture": true,
+  "code-links": {
+    "title": "API"
   }
 }
