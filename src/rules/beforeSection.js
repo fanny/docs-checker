@@ -9,37 +9,36 @@ const path = require('path');
 
 const {createContext} = require(path.resolve(__dirname, '../parser'));
 
-function transverseTree(structure, currentNode, onError) {
+function transverseTree(config, currentNode, onError) {
   const {children, hLevel, node} = currentNode;
+  const subsections = children.filter((child) => child.hLevel);
 
-  if(!structure.before.length){
-    if(node.line.includes(structure.title)){
+  // If after key was not defined in config, the section should be the first
+  if (!structure.before.length) {
+    if (node.line.includes(structure.title)) {
       onError({
         lineNumber: 1,
         detail: 'Your section is not following the recommended structure',
-        context: node.line.substr(0,7),
+        context: node.line.substr(0, 7),
       });
     }
   } else {
-    const sections = children.filter((child) => child.hLevel);
-    const desiredSectionIndex = sections
-      .findIndex((child) => {
-        return child.node.line.includes(structure.title)
-      });
+    const sectionIndex = subsections.findIndex((child) => {
+      return child.node.line.includes(config.section);
+    });
 
-    if(desiredSectionIndex !== -1) {
-        const beforeSection = sections[desiredSectionIndex - 1];
-        if(beforeSection.node.line !== structure.before) {
-          onError({
-            lineNumber: beforeSection.node.lineNumber,
-            detail: 'Your section is not following the recommended structure',
-            context: beforeSection.node.line.substr(0, 7),
-          });
-        }
+    if (sectionIndex !== -1) {
+      const beforeSection = sections[sectionIndex - 1];
+      if (beforeSection.node.line !== config.before) {
+        onError({
+          lineNumber: beforeSection.node.lineNumber,
+          detail: 'Your section is not following the recommended structure',
+          context: beforeSection.node.line.substr(0, 7),
+        });
+      }
     } else {
-      const subsections = children.filter((child) => child.hLevel);
       subsections.forEach((subSection) => {
-        transverseTree(structure[hLevel], subSection, onError);
+        transverseTree(config, subSection, onError);
       });
     }
   }

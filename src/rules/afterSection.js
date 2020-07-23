@@ -9,37 +9,37 @@ const path = require('path');
 
 const {createContext} = require(path.resolve(__dirname, '../parser'));
 
-function transverseTree(structure, currentNode, onError) {
+function transverseTree(config, currentNode, onError) {
   const {children, hLevel} = currentNode;
-  const sections = children.filter((child) => child.hLevel);
+  const subsections = children.filter((child) => child.hLevel);
 
-  if(!structure.after.length){
-    const [lastSection] = sections.slice(-1);
-    if(!lastSection || !lastSection.node.line.includes(structure.title)){
+  // If after key was not defined in config, the section should be the last
+  if (!config.after.length) {
+    const [lastSection] = subsections.slice(-1);
+    if (!lastSection || !lastSection.node.line.includes(config.section)) {
       onError({
         lineNumber: lastSection.node.lineNumber,
-        detail: 'Your section is not following the recommended structure',
+        detail: 'Your section is not following the recommended config',
         context: lastSection.node.line.substr(0, 7),
       });
     }
   } else {
-    const desiredSectionIndex = sections
-      .findIndex((child) => {
-        return child.node.line.includes(structure.title)
-      });
-    if(desiredSectionIndex !== -1) {
-      const afterSection = sections[desiredSectionIndex + 1];
-      if(afterSection.node.line !== structure.after) {
+    const sectionIndex = subsections.findIndex(({node}) => {
+      return node.line.includes(config.section);
+    });
+
+    if (sectionIndex !== -1) {
+      const afterSection = subsections[sectionIndex + 1];
+      if (afterSection.node.line !== config.after) {
         onError({
           lineNumber: afterSection.node.lineNumber,
-          detail: 'Your section is not following the recommended structure',
+          detail: 'Your section is not following the recommended config',
           context: afterSection.node.line.substr(0, 7),
         });
       }
     } else {
-      const subsections = children.filter((child) => child.hLevel);
       subsections.forEach((subSection) => {
-        transverseTree(structure[hLevel], subSection, onError);
+        transverseTree(config, subSection, onError);
       });
     }
   }
@@ -48,7 +48,7 @@ function transverseTree(structure, currentNode, onError) {
 module.exports = {
   names: ['after-section'],
   description: 'After a section',
-  tags: ['md', 'structure'],
+  tags: ['md', 'config'],
   function: function rule(params, onError) {
     const {config, tokens, frontMatterLines} = params;
 

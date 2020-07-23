@@ -13,26 +13,27 @@ const WORDS_PER_MINUTE = 275;
 // Regular expression for inline links and shortcut reference links
 const linkRe = /\[(?:[^[\]]|\[[^\]]*\])*\](?:\(\S*\))?/g;
 
-function transverseTree(structure, currentNode, onError) {
+function transverseTree(config, currentNode, onError) {
   const {children, hLevel, node} = currentNode;
   const subsections = children.filter((child) => child.hLevel);
+  const textSection = node.line.replace(node.markup, '').trim();
 
-  if(node.line.replace(node.markup, '').trim() === structure.title){
-    const isNotLink = subsections.find(section => {
+  if(textSection === config.title){
+    const nonLinkSection = subsections.find(section => {
       const text = section.node.line.replace(section.node.markup, '').trim();
       return !text.match(linkRe) || !text.match(linkRe).length
     })
 
-    if(isNotLink){
+    if(nonLinkSection){
       onError({
-        lineNumber: isNotLink.node.lineNumber,
-        detail: 'Long section, consider it break in more sections or include a visual element',
-        context: isNotLink.node.line.substr(0, 7),
+        lineNumber: nonLinkSection.node.lineNumber,
+        detail: 'Your section should include a link',
+        context: nonLinkSection.node.line.substr(0, 7),
       });
     }
   } else{
     subsections.forEach((subSection) => {
-      transverseTree(structure, subSection, onError);
+      transverseTree(config, subSection, onError);
     });
   }
 }

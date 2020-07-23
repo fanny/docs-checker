@@ -15,7 +15,7 @@ function transverseTree(currentNode, onError) {
   const {children, hLevel, node} = currentNode;
   const textSection = children
     .filter((child) => child.node.type === 'paragraph_open')
-    .map((a) => a.node.line).join('\n');
+    .map((child) => child.node.line).join('\n');
 
   if(textSection){
     const wordCount = textSection.match(/\S+/g).length;
@@ -37,8 +37,8 @@ const subsections = children.filter((child) => child.hLevel);
 
 module.exports = {
   names: ['time-lecture'],
-  description: 'Enforces the structure of a .md file',
-  tags: ['md', 'structure'],
+  description: 'aa',
+  tags: ['time', 'section'],
   function: function rule(params, onError) {
     const {tokens, frontMatterLines} = params;
     const context = createContext(tokens, frontMatterLines);

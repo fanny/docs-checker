@@ -16,11 +16,11 @@
     }
   },
   "before-section": {
-    "title": "@build-tracker/api-client",
+    "section": "@build-tracker/api-client",
     "before": ""
   },
   "after-section": {
-    "title": "Bla",
+    "section": "Bla",
     "after": ""
   },
   "time-lecture": true,
