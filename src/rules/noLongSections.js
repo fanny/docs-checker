@@ -36,9 +36,9 @@ const subsections = children.filter((child) => child.hLevel);
 }
 
 module.exports = {
-  names: ['time-lecture'],
-  description: 'aa',
-  tags: ['time', 'section'],
+  names: ['no-long-sections'],
+  description: 'Prevent sections to take more than 7 minutes to read',
+  tags: ['time', 'reading', 'md'],
   function: function rule(params, onError) {
     const {tokens, frontMatterLines} = params;
     const context = createContext(tokens, frontMatterLines);

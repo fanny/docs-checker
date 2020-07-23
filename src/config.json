@@ -15,16 +15,16 @@
       }
     }
   },
-  "before-section": {
+  "require-section-before": {
     "section": "@build-tracker/api-client",
-    "before": ""
+    "previous": ""
   },
-  "after-section": {
+  "require-section-after": {
     "section": "Bla",
-    "after": ""
+    "next": ""
   },
-  "time-lecture": true,
-  "code-links": {
+  "no-long-sections": true,
+  "require-link-in-code-signature": {
     "title": "API"
   }
 }

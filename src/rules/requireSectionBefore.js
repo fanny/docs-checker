@@ -28,12 +28,12 @@ function transverseTree(config, currentNode, onError) {
     });
 
     if (sectionIndex !== -1) {
-      const beforeSection = sections[sectionIndex - 1];
-      if (beforeSection.node.line !== config.before) {
+      const previousSection = sections[sectionIndex - 1];
+      if (previousSection.node.line !== config.previous) {
         onError({
-          lineNumber: beforeSection.node.lineNumber,
+          lineNumber: previousSection.node.lineNumber,
           detail: 'Your section is not following the recommended structure',
-          context: beforeSection.node.line.substr(0, 7),
+          context: previousSection.node.line.substr(0, 7),
         });
       }
     } else {
@@ -45,8 +45,8 @@ function transverseTree(config, currentNode, onError) {
 }
 
 module.exports = {
-  names: ['before-section'],
-  description: 'Enforces the structure of a .md file',
+  names: ['require-section-before'],
+  description: 'Enforce that a section should be before the specified.',
   tags: ['md', 'structure'],
   function: function rule(params, onError) {
     const {config, tokens, frontMatterLines} = params;

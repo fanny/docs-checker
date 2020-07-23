@@ -38,7 +38,7 @@ function transverseTree(structure, currentNode, onError) {
 }
 
 module.exports = {
-  names: ['enforce-structure'],
+  names: ['require-structure'],
   description: 'Enforces the structure of a .md file',
   tags: ['md', 'structure'],
   function: function rule(params, onError) {

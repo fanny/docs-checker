@@ -9,7 +9,6 @@ const path = require('path');
 
 const {createContext} = require(path.resolve(__dirname, '../parser'));
 
-const WORDS_PER_MINUTE = 275;
 // Regular expression for inline links and shortcut reference links
 const linkRe = /\[(?:[^[\]]|\[[^\]]*\])*\](?:\(\S*\))?/g;
 
@@ -39,8 +38,8 @@ function transverseTree(config, currentNode, onError) {
 }
 
 module.exports = {
-  names: ['code-links'],
-  description: 'Enforces the structure of a .md file',
+  names: ['require-link-in-code-signature'],
+  description: 'Ensures that code sections include a link for the source code.',
   tags: ['md', 'structure'],
   function: function rule(params, onError) {
     const {tokens, config, frontMatterLines} = params;

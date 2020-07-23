@@ -29,12 +29,12 @@ function transverseTree(config, currentNode, onError) {
     });
 
     if (sectionIndex !== -1) {
-      const afterSection = subsections[sectionIndex + 1];
-      if (afterSection.node.line !== config.after) {
+      const nextSection = subsections[sectionIndex + 1];
+      if (nextSection.node.line !== config.next) {
         onError({
-          lineNumber: afterSection.node.lineNumber,
+          lineNumber: nextSection.node.lineNumber,
           detail: 'Your section is not following the recommended config',
-          context: afterSection.node.line.substr(0, 7),
+          context: nextSection.node.line.substr(0, 7),
         });
       }
     } else {
@@ -46,7 +46,7 @@ function transverseTree(config, currentNode, onError) {
 }
 
 module.exports = {
-  names: ['after-section'],
+  names: ['require-section-after'],
   description: 'After a section',
   tags: ['md', 'config'],
   function: function rule(params, onError) {
