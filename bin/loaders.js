@@ -41,7 +41,7 @@ function loadRules() {
 
 function loadOptions(files, projectDir = process.cwd()) {
   const configPath = path.resolve(projectDir, CONFIG_FILENAME);
-  const {rules: userRulesConfig} = require(configPath);
+  const { rules: userRulesConfig } = require(configPath);
   //const userRulesDir = require(path.resolve(projectDir, rulesDir));
 
   const rulesConfig = loadRuleConfigs(userRulesConfig);

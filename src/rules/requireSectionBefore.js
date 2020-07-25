@@ -1,9 +1,9 @@
 const path = require('path');
 
-const {createContext} = require(path.resolve(__dirname, '../parser'));
+const { createContext } = require(path.resolve(__dirname, '../parser'));
 
 function transverseTree(config, currentNode, onError) {
-  const {children, hLevel, node} = currentNode;
+  const { children, hLevel, node } = currentNode;
   const subsections = children.filter((child) => child.hLevel);
 
   // If after key was not defined in config, the section should be the first
@@ -42,7 +42,7 @@ module.exports = {
   description: 'Enforce that a section should be before the specified.',
   tags: ['md', 'structure'],
   function: function rule(params, onError) {
-    const {config, tokens, frontMatterLines} = params;
+    const { config, tokens, frontMatterLines } = params;
 
     const context = createContext(tokens, frontMatterLines);
     transverseTree(config, context, onError);

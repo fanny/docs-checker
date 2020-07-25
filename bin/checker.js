@@ -1,6 +1,6 @@
 const cli = require('commander');
-const {loadOptions} = require('./loaders.js');
-const {lint} = require('../src/commands/lint.js');
+const { loadOptions } = require('./loaders.js');
+const { lint } = require('../src/commands/lint.js');
 
 cli
   .command('lint <yourfile...>')

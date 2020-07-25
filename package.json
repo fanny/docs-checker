@@ -6,7 +6,11 @@
   "license": "MIT",
   "devDependencies": {
     "commander": "^5.1.0",
-    "markdownlint": "^0.20.4"
+    "markdownlint": "^0.20.4",
+    "prettier": "2.0.5"
+  },
+  "scripts": {
+    "lint": "prettier --config .prettierrc.json --write . \"*/**/*.js\""
   },
   "bin": {
     "docs-checker": "babel-node ./bin/checker.js"

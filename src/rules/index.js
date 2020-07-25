@@ -10,16 +10,12 @@ const requireSectionBefore = require(path.resolve(
   './requireSectionBefore.js',
 ));
 
-
 const requireSectionAfter = require(path.resolve(
   __dirname,
   './requireSectionAfter.js',
 ));
 
-const noLongSections = require(path.resolve(
-  __dirname,
-  './noLongSections.js',
-));
+const noLongSections = require(path.resolve(__dirname, './noLongSections.js'));
 
 const requireLinkInCodeSignature = require(path.resolve(
   __dirname,
@@ -31,5 +27,5 @@ module.exports = [
   requireSectionBefore,
   requireSectionAfter,
   noLongSections,
-  requireLinkInCodeSignature
+  requireLinkInCodeSignature,
 ];

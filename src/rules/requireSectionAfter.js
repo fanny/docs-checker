@@ -1,9 +1,9 @@
 const path = require('path');
 
-const {createContext} = require(path.resolve(__dirname, '../parser'));
+const { createContext } = require(path.resolve(__dirname, '../parser'));
 
 function transverseTree(config, currentNode, onError) {
-  const {children, hLevel} = currentNode;
+  const { children, hLevel } = currentNode;
   const subsections = children.filter((child) => child.hLevel);
 
   if (!config.next.length) {
@@ -15,7 +15,7 @@ function transverseTree(config, currentNode, onError) {
         context: lastSection.node.line.substr(0, 7),
       });
     }
-    if (!lastSection){
+    if (!lastSection) {
       onError({
         lineNumber: 1,
         detail: 'Your section is not following the recommended config',
@@ -23,7 +23,7 @@ function transverseTree(config, currentNode, onError) {
       });
     }
   } else {
-    const sectionIndex = subsections.findIndex(({node}) => {
+    const sectionIndex = subsections.findIndex(({ node }) => {
       return node.line.includes(config.section);
     });
 
@@ -49,7 +49,7 @@ module.exports = {
   description: 'Enforce that a section should be after the specified.',
   tags: ['md', 'config'],
   function: function rule(params, onError) {
-    const {config, tokens, frontMatterLines} = params;
+    const { config, tokens, frontMatterLines } = params;
 
     const context = createContext(tokens, frontMatterLines);
     transverseTree(config, context, onError);

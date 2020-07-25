@@ -1,12 +1,12 @@
 const path = require('path');
 const CONSTANTS = require(path.resolve(__dirname, './constants.js'));
-const {TOKENS_TYPE, TOKENS_TAG} = CONSTANTS;
+const { TOKENS_TYPE, TOKENS_TAG } = CONSTANTS;
 
-function isLeaf(node){
+function isLeaf(node) {
   return node && !node.children.length;
 }
 
-function isSubSection(child){
+function isSubSection(child) {
   return child.node.type === TOKENS_TYPE.HEADING_OPEN;
 }
 
@@ -28,9 +28,7 @@ function getParent(currentNode, node) {
   if (!lastChild) {
     return currentNode;
   } else if (isLeaf(lastChild)) {
-    return isSubSection(lastChild)
-      ? lastChild
-      : currentNode;
+    return isSubSection(lastChild) ? lastChild : currentNode;
   } else {
     const lastChildHLevel =
       lastChild && lastChild.hLevel && parseInt(lastChild.hLevel.slice(-1)[0]);
@@ -43,7 +41,7 @@ function getParent(currentNode, node) {
 }
 
 function createSubTree(tokens, currentSection) {
-  const tree = {...currentSection};
+  const tree = { ...currentSection };
   const parsedTokens = tokens.forEach((token, idx) => {
     const node = {
       hLevel: token.type === TOKENS_TYPE.HEADING_OPEN ? token.tag : null,
@@ -64,7 +62,7 @@ function createContext(tokens, frontMatter) {
       type: 'heading_open',
       tag: 'h1',
       attrs: null,
-      map: [ 1 ],
+      map: [1],
       nesting: 1,
       level: 0,
       children: null,
@@ -75,7 +73,7 @@ function createContext(tokens, frontMatter) {
       block: true,
       hidden: false,
       line: frontMatter[2],
-      lineNumber: 1
+      lineNumber: 1,
     },
     children: [],
   };
