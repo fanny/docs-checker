@@ -1,10 +1,3 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 const path = require('path');
 
 const {createContext} = require(path.resolve(__dirname, '../parser'));
@@ -13,14 +6,20 @@ function transverseTree(config, currentNode, onError) {
   const {children, hLevel} = currentNode;
   const subsections = children.filter((child) => child.hLevel);
 
-  // If after key was not defined in config, the section should be the last
   if (!config.next.length) {
     const [lastSection] = subsections.slice(-1);
-    if (!lastSection || !lastSection.node.line.includes(config.section)) {
+    if (lastSection && !lastSection.node.line.includes(config.section)) {
       onError({
         lineNumber: lastSection.node.lineNumber,
         detail: 'Your section is not following the recommended config',
         context: lastSection.node.line.substr(0, 7),
+      });
+    }
+    if (!lastSection){
+      onError({
+        lineNumber: 1,
+        detail: 'Your section is not following the recommended config',
+        context: currentNode.node.line.substr(0, 7),
       });
     }
   } else {

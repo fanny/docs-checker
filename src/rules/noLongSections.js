@@ -1,10 +1,3 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 const path = require('path');
 
 const {createContext} = require(path.resolve(__dirname, '../parser'));
@@ -29,7 +22,7 @@ function transverseTree(currentNode, onError) {
     }
   }
 
-const subsections = children.filter((child) => child.hLevel);
+  const subsections = children.filter((child) => child.hLevel);
   subsections.forEach((subSection) => {
     transverseTree(subSection, onError);
   });

@@ -1,13 +1,3 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-/** The markdown-it return object tokens with many items, and not all are used,
- * This method transforms the token in their string tags.
- */
 const path = require('path');
 const CONSTANTS = require(path.resolve(__dirname, './constants.js'));
 const {TOKENS_TYPE, TOKENS_TAG} = CONSTANTS;

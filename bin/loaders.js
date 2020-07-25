@@ -1,10 +1,3 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 const path = require('path');
 const globby = require('globby');
 
@@ -37,22 +30,22 @@ function loadRuleConfigs(userRulesConfig) {
   return rules;
 }
 
-function loadRules(userRulesDir) {
+function loadRules() {
   const defaultRulesDir = require(path.resolve(
     __dirname,
     `../src/${RULES_DIR}`,
   ));
 
-  return [...userRulesDir, ...defaultRulesDir];
+  return [...defaultRulesDir];
 }
 
 function loadOptions(files, projectDir = process.cwd()) {
   const configPath = path.resolve(projectDir, CONFIG_FILENAME);
-  const {rules: userRulesConfig, rulesDir} = require(configPath);
-  const userRulesDir = require(path.resolve(projectDir, rulesDir));
+  const {rules: userRulesConfig} = require(configPath);
+  //const userRulesDir = require(path.resolve(projectDir, rulesDir));
 
   const rulesConfig = loadRuleConfigs(userRulesConfig);
-  const rules = loadRules(userRulesDir);
+  const rules = loadRules();
   return {
     files,
     config: rulesConfig,
