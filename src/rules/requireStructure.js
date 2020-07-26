@@ -9,23 +9,24 @@ function transverseTree(structure, currentNode, onError) {
 
   const validTokens =
     structure && structure.hasOwnProperty(hLevel)
-      ? Object.entries(structure[hLevel])
-          .filter(([key, value]) => value !== 'optional')
-          .map(([key, _]) => key)
+      ? Object.entries(structure[hLevel]).map(([key, value]) =>
+          value === 'optional' ? `(${key})?` : key,
+        )
       : [];
 
-  if (validTokens.length) {
-    const invalid = children
-      .filter((child) => !child.node.type.match('close|inline'))
-      .find((child) => {
-        return !validTokens.includes(child.node.tag) && child.node.tag !== '';
-      });
+  const nodeTags = children.filter(
+    (child) => !child.node.type.match('close|inline'),
+  );
 
-    if (invalid) {
+  if (validTokens.length) {
+    const tokensRegex = `(${validTokens.join('')})+`;
+    const tagsRepresentation = nodeTags.map((child) => child.node.tag).join('');
+
+    if (!tagsRepresentation.match(tokensRegex)) {
       onError({
-        lineNumber: invalid.node.lineNumber,
+        lineNumber: currentNode.node.lineNumber,
         detail: 'Your section is not following the recommended structure',
-        context: invalid.node.line.substr(0, 7),
+        context: currentNode.node.line.substr(0, 7),
       });
     }
   }

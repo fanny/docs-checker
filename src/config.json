@@ -9,7 +9,8 @@
       },
       "h2": {
         "p": "required",
-        "h3": "required"
+        "code": "required",
+        "h3": "optional"
       },
       "h3": {
         "p": "required",
