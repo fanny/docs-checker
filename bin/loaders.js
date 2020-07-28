@@ -58,8 +58,7 @@ function loadConfigFileInAncestors(directoryPath, rootPath){
 
 function loadConfigFile(projectDir, files) {
   const localConfigPath = path.join(projectDir, path.dirname(files[0]));
-  const rootConfigPath = path.join(projectDir, CONFIG_FILENAME);
-  return loadConfigFileInAncestors(localConfigPath, rootConfigPath);
+  return loadConfigFileInAncestors(localConfigPath, projectDir);
 }
 
 // TODO: Add validations
