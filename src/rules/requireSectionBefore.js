@@ -6,9 +6,8 @@ function transverseTree(config, currentNode, onError) {
   const { children, hLevel, node } = currentNode;
   const subsections = children.filter((child) => child.hLevel);
 
-  // If after key was not defined in config, the section should be the first
   if (!config.previous.length) {
-    if (node.line.includes(config.section)) {
+    if (!node.line.includes(config.section)) {
       onError({
         lineNumber: 1,
         detail: 'Your section is not following the recommended structure',
