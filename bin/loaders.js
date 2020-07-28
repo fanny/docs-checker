@@ -1,5 +1,5 @@
 const path = require('path');
-const globby = require('globby');
+const fs = require('fs');
 
 const CONFIG_FILENAME = 'config.json';
 const RULES_DIR = 'rules';
@@ -39,9 +39,24 @@ function loadRules() {
   return [...defaultRulesDir];
 }
 
+
+function loadConfigFile(projectDir, files) {
+  const localConfigPath = path.join(path.join(projectDir, path.dirname(files[0])), CONFIG_FILENAME);
+  const rootConfigPath = path.join(projectDir, CONFIG_FILENAME);
+
+  if(fs.existsSync(localConfigPath)){
+    return path.resolve(localConfigPath);
+  } else if(fs.existsSync(rootConfigPath)){
+    return path.resolve(rootConfigPath);
+  } else {
+    throw `Cannot read config file: ${CONFIG_FILENAME}\n`
+  }
+}
+
+// TODO: Add validations
 function loadOptions(files, projectDir = process.cwd()) {
-  const configPath = path.resolve(projectDir, CONFIG_FILENAME);
-  const { rules: userRulesConfig } = require(configPath);
+  const configFile = loadConfigFile(projectDir, files)
+  const { rules: userRulesConfig } = require(configFile);
   //const userRulesDir = require(path.resolve(projectDir, rulesDir));
 
   const rulesConfig = loadRuleConfigs(userRulesConfig);
