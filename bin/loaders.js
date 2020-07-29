@@ -39,22 +39,20 @@ function loadRules() {
   return [...defaultRulesDir];
 }
 
-
-function loadConfigFileInAncestors(directoryPath, rootPath){
+function loadConfigFileInAncestors(directoryPath, rootPath) {
   const configPath = path.join(directoryPath, CONFIG_FILENAME);
   const parentPath = path.dirname(directoryPath);
 
-  if(fs.existsSync(configPath)){
+  if (fs.existsSync(configPath)) {
     return path.resolve(configPath);
   } else {
-    if(parentPath === rootPath){
-      throw `Cannot read config file: ${CONFIG_FILENAME}\n`
+    if (parentPath === rootPath) {
+      throw `Cannot read config file: ${CONFIG_FILENAME}\n`;
     } else {
       return loadConfigFileInAncestors(parentPath);
     }
   }
 }
-
 
 function loadConfigFile(projectDir, files) {
   const localConfigPath = path.join(projectDir, path.dirname(files[0]));

@@ -1,10 +1,11 @@
 const markdownlint = require('markdownlint');
 const path = require('path');
+const { formatter } = require('../../bin/formatter.js');
 
 function lint(options) {
   markdownlint(options, function (err, result) {
     if (!err) {
-      console.warn(result.toString());
+      console.log(formatter(result));
     }
   });
 }
