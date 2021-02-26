@@ -13,7 +13,7 @@
     "lint": "prettier --config .prettierrc.json --write . \"*/**/*.js\""
   },
   "bin": {
-    "docs-checker": "babel-node ./bin/checker.js"
+    "docs-checker": "./bin/checker.js"
   },
   "publishConfig": {
     "access": "public"

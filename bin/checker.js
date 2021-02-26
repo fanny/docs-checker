@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const cli = require('commander');
 const { loadOptions } = require('./loaders.js');
 const { lint } = require('../src/commands/lint.js');
