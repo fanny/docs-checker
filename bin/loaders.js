@@ -8,7 +8,7 @@ function mergeRuleConfigs(target, source) {
   const entries = Object.entries(source);
   entries.forEach((entry) => {
     const [rule, sourceDef] = entry;
-    const targetDef = target[rule];
+    const targetDef = target?.[rule];
     if (!targetDef) {
       if (Array.isArray(source[rule])) {
         // TO DO: evaluate a better strategy for deep structures
@@ -63,6 +63,7 @@ function loadConfigFile(projectDir, files) {
 function loadOptions(files, projectDir = process.cwd()) {
   const configFile = loadConfigFile(projectDir, files);
   const { rules: userRulesConfig } = require(configFile);
+  console.log(userRulesConfig)
   //const userRulesDir = require(path.resolve(projectDir, rulesDir));
 
   const rulesConfig = loadRuleConfigs(userRulesConfig);

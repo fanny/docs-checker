@@ -1,33 +1,35 @@
 {
   "comment": "Rules for the demo website",
   "default": false,
-  "require-structure": {
-    "structure": {
-      "h1": {
-        "p": "required",
-        "h2": "required"
-      },
-      "h2": {
-        "p": "required",
-        "code": "optional",
-        "h3": "optional"
-      },
-      "h3": {
-        "p": "required",
-        "code": "required"
+  "rules": {
+    "require-structure": {
+      "structure": {
+        "h1": {
+          "p": "required",
+          "h2": "required"
+        },
+        "h2": {
+          "p": "required",
+          "code": "optional",
+          "h3": "optional"
+        },
+        "h3": {
+          "p": "required",
+          "code": "required"
+        }
       }
+    },
+    "require-section-before": {
+      "section": "@build-tracker/api-client",
+      "previous": ""
+    },
+    "require-section-after": {
+      "section": "Bla",
+      "next": ""
+    },
+    "no-long-sections": true,
+    "require-link-in-code-signature": {
+      "title": "API"
     }
-  },
-  "require-section-before": {
-    "section": "@build-tracker/api-client",
-    "previous": ""
-  },
-  "require-section-after": {
-    "section": "Bla",
-    "next": ""
-  },
-  "no-long-sections": true,
-  "require-link-in-code-signature": {
-    "title": "API"
   }
 }
