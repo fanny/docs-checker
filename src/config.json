@@ -8,15 +8,20 @@
           "p": "required",
           "h2": "required"
         },
-        "h2": {
+        "h2": [{
           "p": "required",
           "code": "optional",
           "h3": "optional"
-        },
-        "h3": {
+        }, {
+          "h3": "required"
+        }],
+        "h3": [{
           "p": "required",
           "code": "required"
-        }
+        }, {
+          "p": "required",
+          "table": "required"
+        }]
       }
     },
     "require-section-before": {

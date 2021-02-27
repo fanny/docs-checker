@@ -63,7 +63,6 @@ function loadConfigFile(projectDir, files) {
 function loadOptions(files, projectDir = process.cwd()) {
   const configFile = loadConfigFile(projectDir, files);
   const { rules: userRulesConfig } = require(configFile);
-  console.log(userRulesConfig)
   //const userRulesDir = require(path.resolve(projectDir, rulesDir));
 
   const rulesConfig = loadRuleConfigs(userRulesConfig);
