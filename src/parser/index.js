@@ -55,6 +55,46 @@ function createSubTree(tokens, currentSection) {
   return tree;
 }
 
+function headingEvaluation(tokens, root) {
+  stack = [root, tokens[0]]
+  elemsStack = []
+  index = 0
+  while(stack.length) {
+    top = stack.pop()
+    const node = {
+      hLevel: top?.type === TOKENS_TYPE.HEADING_OPEN ? top.tag : null,
+      node: top,
+      children: [],
+    };
+
+    if(top?.type == TOKENS_TYPE.HEADING_OPEN || index == tokens.length-1 ) {
+      if(stack.length != 0) {
+        let previous = stack.pop()
+        previous.children.push(...elemsStack) // required
+        if(index == tokens.length-1) {
+          stack = []
+        } else {
+          if(parseInt(previous.hLevel.slice(-1)[0]) >=  parseInt(node.hLevel.slice(-1)[0])) {
+            while(parseInt(previous.hLevel.slice(-1)[0]) >=  parseInt(node.hLevel.slice(-1)[0]))
+              previous = stack.pop()
+          }
+          previous.children.push(node)
+          elemsStack = []
+          stack.push(...[previous, node])
+        }
+      }
+    } else {
+      elemsStack.push(node)
+    }
+
+    index += 1
+    if(index < tokens.length)
+      stack.push(tokens[index])
+  }
+
+  return root
+}
+
 function createContext(tokens, frontMatter) {
   const rootSection = {
     hLevel: 'h1',
@@ -77,7 +117,11 @@ function createContext(tokens, frontMatter) {
     },
     children: [],
   };
-  const tree = createSubTree(tokens, rootSection);
+  const tree = headingEvaluation(tokens, rootSection);
+  
+  console.log(frontMatter)
+  console.log(tree)
+  console.log('\n\n\n')
   return tree;
 }
 
