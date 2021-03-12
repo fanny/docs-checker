@@ -7,7 +7,7 @@ function lint(options) {
     if (!err) {
       console.log(formatter(result));
     }
-    console.error(err)
+    console.error(err);
   });
 }
 

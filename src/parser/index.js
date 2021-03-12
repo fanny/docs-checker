@@ -2,37 +2,39 @@ const path = require('path');
 const CONSTANTS = require(path.resolve(__dirname, './constants.js'));
 const { TOKENS_TYPE } = CONSTANTS;
 
-
 function getPrecedence(node) {
-  return parseInt(node.hLevel.slice(-1)[0])
+  return parseInt(node.hLevel.slice(-1)[0]);
 }
 
 function createHeadingHierarchy(tokens, root) {
-  const stack = [root]
-  let topStackHeading = stack[0]
+  const stack = [root];
+  let topStackHeading = stack[0];
 
   tokens.forEach((token) => {
-    const node = {
+    const tokenRepresentation = {
       hLevel: token?.type === TOKENS_TYPE.HEADING_OPEN ? token.tag : null,
       node: token,
       children: [],
     };
 
-    if(token?.type === TOKENS_TYPE.HEADING_OPEN) {
-      if(getPrecedence(node) < getPrecedence(topStackHeading)) {
-        while(getPrecedence(node) < getPrecedence(topStackHeading) && stack.length) {
-          topStackHeading = stack.pop()
+    if (token?.type === TOKENS_TYPE.HEADING_OPEN) {
+      if (getPrecedence(tokenRepresentation) < getPrecedence(topStackHeading)) {
+        while (
+          getPrecedence(tokenRepresentation) < getPrecedence(topStackHeading) &&
+          stack.length
+        ) {
+          topStackHeading = stack.pop();
         }
       }
-      topStackHeading.children.push(node)
-      stack.push(...[topStackHeading, node])
-      topStackHeading = node
+      topStackHeading.children.push(tokenRepresentation);
+      stack.push(...[topStackHeading, tokenRepresentation]);
+      topStackHeading = tokenRepresentation;
     } else {
-      topStackHeading.children.push(node)
+      topStackHeading.children.push(tokenRepresentation);
     }
-  })
+  });
 
-  return root
+  return root;
 }
 
 function createContext(tokens, frontMatter) {
