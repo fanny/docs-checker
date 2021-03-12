@@ -1,6 +1,6 @@
-const chalk = require("chalk"),
-    stripAnsi = require("strip-ansi"),
-    table = require("text-table");
+const chalk = require('chalk'),
+  stripAnsi = require('strip-ansi'),
+  table = require('text-table');
 
 function pluralize(word, count) {
   return count === 1 ? word : `${word}s`;
@@ -44,5 +44,5 @@ function formatter(results) {
 }
 
 module.exports = {
-  formatter
-}
+  formatter,
+};

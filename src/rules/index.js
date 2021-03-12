@@ -5,6 +5,4 @@ const requireStructure = require(path.resolve(
   './requireStructure.js',
 ));
 
-module.exports = [
-  requireStructure
-];
+module.exports = [requireStructure];

@@ -3,22 +3,22 @@ const path = require('path');
 
 const { createContext } = require(path.resolve(__dirname, '../parser'));
 
-
 function getTokensRegex(tokens) {
   return Object.entries(tokens).map(([key, value]) =>
     value === 'optional' ? `(${key})?` : key,
-  )
+  );
 }
 
 function getValidTokens(structure, hLevel) {
-  const tokens = structure?.[hLevel]
-  if(!tokens) return []
+  const tokens = structure?.[hLevel];
+  if (!tokens) return [];
 
-  return Array.isArray(tokens) ?
-    tokens.map(getTokensRegex)
-      .map((token) => token.join(''))
-      .join('|') // explain why
-    : getTokensRegex(tokens).join('')
+  return Array.isArray(tokens)
+    ? tokens
+        .map(getTokensRegex)
+        .map((token) => token.join(''))
+        .join('|') // explain why
+    : getTokensRegex(tokens).join('');
 }
 
 function transverseTree(structure, currentNode, onError) {
@@ -32,12 +32,8 @@ function transverseTree(structure, currentNode, onError) {
   );
 
   if (validTokens.length) {
-    const tokensRegex = `(${validTokens})+`; // TODO: Rever
-    console.log(tokensRegex)
+    const tokensRegex = `(${validTokens})+`;
     const tagsRepresentation = nodeTags.map((child) => child.node.tag).join('');
-    //console.log(`tokens: ${tokensRegex}\n\n`)
-    //console.log(`tagsRepresentation: ${tagsRepresentation}\n\n`)
-    //console.log(`test: ${tagsRepresentation.match(tokensRegex)}\n\n`)
 
     if (!tagsRepresentation.match(tokensRegex)) {
       onError({
