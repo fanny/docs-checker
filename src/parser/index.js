@@ -7,7 +7,8 @@ function getPrecedence(node) {
 }
 
 function createHeadingHierarchy(tokens, root) {
-  const stack = [root];
+  const rootCopy = Object.assign({}, root);
+  const stack = [rootCopy];
   let topStackHeading = stack[0];
 
   tokens.forEach((token) => {
@@ -34,7 +35,7 @@ function createHeadingHierarchy(tokens, root) {
     }
   });
 
-  return root;
+  return rootCopy;
 }
 
 function createContext(tokens, frontMatter) {
