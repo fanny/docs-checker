@@ -9,8 +9,10 @@ function pluralize(word, count) {
 function formatter(results) {
   let output = '\n';
 
-  Object.keys(results).forEach((file) => {
+  Object.keys(results).forEach((file,index) => {
     const resultValues = results[file];
+    if(index == 0)
+      console.log(results[file])
 
     output += `${chalk.underline(file)}\n`;
 
@@ -42,7 +44,7 @@ function formatter(results) {
 
   return chalk.reset(output);
 }
-
+// use a formatter like that: https://github.com/adriantoine/eslint-codeframe-formatter#readme
 module.exports = {
   formatter,
 };

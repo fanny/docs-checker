@@ -44,7 +44,6 @@ function loadConfigFileInAncestors(directoryPath, rootPath) {
   }
 }
 
-
 // TODO: Add validations
 function loadOptions(files, projectDir = process.cwd()) {
   const [filePath, _] = files;
@@ -65,6 +64,8 @@ function loadOptions(files, projectDir = process.cwd()) {
   };
 }
 
+// normalizeConfigs: https://github.com/rome/tools/blob/main/internal/core/common/userConfig.ts
+// check if configs exist on file
 module.exports = {
   loadOptions,
 };
