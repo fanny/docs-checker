@@ -1,46 +1,36 @@
 const path = require('path');
 const fs = require('fs');
+const { merge } = require('lodash');
 
 const CONFIG_FILENAME = 'config.json';
 const RULES_DIR = 'rules';
-
-function mergeRuleConfigs(target, source) {
-  const entries = Object.entries(source);
-  entries.forEach((entry) => {
-    const [rule, sourceDef] = entry;
-    const targetDef = target?.[rule];
-    if (!targetDef) {
-      if (Array.isArray(source[rule])) {
-        // TO DO: evaluate a better strategy for deep structures
-        target[rule] = [...sourceDef];
-      } else {
-        target[rule] = sourceDef;
-      }
-    }
-  });
-  return target;
-}
 
 function loadRuleConfigs(userRulesConfig) {
   const sourceConfig = require(path.resolve(
     __dirname,
     `../src/${CONFIG_FILENAME}`,
   ));
-  const rules = mergeRuleConfigs(userRulesConfig, sourceConfig);
+
+  const rules = merge(userRulesConfig, sourceConfig);
   return rules;
 }
 
-function loadRules() {
-  const defaultRulesDir = require(path.resolve(
+function loadRules(userRulesDir) {
+  const defaultRules = require(path.resolve(
     __dirname,
     `../src/${RULES_DIR}`,
   ));
-
-  return [...defaultRulesDir];
+  const customRules = userRulesDir && require(
+    path.resolve(userRulesDir)
+  );
+  
+  return (customRules !== null) 
+    ? [...defaultRules, ...customRules]
+    : [...defaultRules];
 }
 
 function loadConfigFileInAncestors(directoryPath, rootPath) {
-  const configPath = path.join(directoryPath, CONFIG_FILENAME);
+  const configPath = path.join(directoryPath, CONFIG_FILENAME); 
   const parentPath = path.dirname(directoryPath);
 
   if (fs.existsSync(configPath)) {
@@ -54,19 +44,20 @@ function loadConfigFileInAncestors(directoryPath, rootPath) {
   }
 }
 
-function loadConfigFile(projectDir, files) {
-  const localConfigPath = path.join(projectDir, path.dirname(files[0]));
-  return loadConfigFileInAncestors(localConfigPath, projectDir);
-}
 
 // TODO: Add validations
 function loadOptions(files, projectDir = process.cwd()) {
-  const configFile = loadConfigFile(projectDir, files);
+  const [filePath, _] = files;
+  const docsPath = path.join(projectDir, path.dirname(filePath)) 
+  const configFile = loadConfigFileInAncestors(docsPath, projectDir);
+
   const { rules: userRulesConfig } = require(configFile);
-  //const userRulesDir = require(path.resolve(projectDir, rulesDir));
+  const userRulesDir = userRulesConfig.customRules && 
+    path.join(docsPath, userRulesConfig.customRules);
 
   const rulesConfig = loadRuleConfigs(userRulesConfig);
-  const rules = loadRules();
+  const rules = loadRules(userRulesDir);
+
   return {
     files,
     config: rulesConfig,
@@ -74,8 +65,6 @@ function loadOptions(files, projectDir = process.cwd()) {
   };
 }
 
-// TO DO:
-// NormalizeConfigs
 module.exports = {
   loadOptions,
 };

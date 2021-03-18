@@ -6,6 +6,7 @@
   "license": "MIT",
   "devDependencies": {
     "commander": "^5.1.0",
+    "lodash.merge": "^4.6.2",
     "markdownlint": "^0.20.4",
     "prettier": "2.0.5"
   },
