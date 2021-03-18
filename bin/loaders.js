@@ -66,6 +66,7 @@ function loadOptions(files, projectDir = process.cwd()) {
 
 // normalizeConfigs: https://github.com/rome/tools/blob/main/internal/core/common/userConfig.ts
 // check if configs exist on file
+// supress lint https://github.com/rome/tools/blob/5c6e97043ad4d515d8a79a877c4641a95ca4867a/internal/compiler/suppressionsParser.ts#L265
 module.exports = {
   loadOptions,
 };
