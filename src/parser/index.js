@@ -1,6 +1,6 @@
 const path = require('path');
 const CONSTANTS = require(path.resolve(__dirname, './constants.js'));
-const { TOKENS_TYPE } = CONSTANTS;
+const { TOKENS_TYPE, SUPPRESS_COMMENT_RE } = CONSTANTS;
 
 function getPrecedence(node) {
   return parseInt(node.hLevel.slice(-1)[0]);
@@ -10,6 +10,7 @@ function createHeadingHierarchy(tokens, root) {
   const rootCopy = Object.assign({}, root);
   const stack = [rootCopy];
   let topStackHeading = stack[0];
+  let isSectionDisabled = false;
 
   tokens.forEach((token) => {
     const tokenRepresentation = {
@@ -19,19 +20,30 @@ function createHeadingHierarchy(tokens, root) {
     };
 
     if (token?.type === TOKENS_TYPE.HEADING_OPEN) {
-      if (getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading)) {
-        while (
-          getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading) &&
-          stack.length
-        ) {
-          topStackHeading = stack.pop();
-        }
+      if(isSectionDisabled) {
+        isSectionDisabled = false;
       }
-      topStackHeading.children.push(tokenRepresentation);
-      stack.push(...[topStackHeading, tokenRepresentation]);
-      topStackHeading = tokenRepresentation;
+       else {
+        if (getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading)) {
+          while (
+            getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading) &&
+            stack.length
+          ) {
+            topStackHeading = stack.pop();
+          }
+        }
+        topStackHeading.children.push(tokenRepresentation);
+        stack.push(...[topStackHeading, tokenRepresentation]);
+        topStackHeading = tokenRepresentation;
+      }
     } else {
-      topStackHeading.children.push(tokenRepresentation);
+      if(SUPPRESS_COMMENT_RE.test(token.content)){
+        [_, command] = SUPPRESS_COMMENT_RE.exec(token.content);
+        isSectionDisabled = true
+      }
+      if(!isSectionDisabled){
+        topStackHeading.children.push(tokenRepresentation);
+      }
     }
   });
 
