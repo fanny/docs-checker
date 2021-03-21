@@ -38,6 +38,7 @@ function transverseTree(structure, currentNode, onError) {
         lineNumber: currentNode.node.lineNumber,
         detail: 'Your section is not following the recommended structure',
         context: currentNode.node.line.substr(0, 7),
+        severity: 2
       });
     }
   }
