@@ -12,7 +12,7 @@ function createHeadingHierarchy(tokens, root) {
   let topStackHeading = stack[0];
   let isSectionDisabled = false;
 
-  tokens.forEach((token) => {
+  tokens.forEach((token, index) => {
     const tokenRepresentation = {
       hLevel: token?.type === TOKENS_TYPE.HEADING_OPEN ? token.tag : null,
       node: token,
@@ -20,10 +20,13 @@ function createHeadingHierarchy(tokens, root) {
     };
 
     if (token?.type === TOKENS_TYPE.HEADING_OPEN) {
-      if(isSectionDisabled) {
+      if(index !== 0 && 
+        isSectionDisabled && 
+        !SUPPRESS_COMMENT_RE.test(token[index-1].content)
+      ) {
         isSectionDisabled = false;
       }
-       else {
+      if(!isSectionDisabled) {
         if (getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading)) {
           while (
             getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading) &&

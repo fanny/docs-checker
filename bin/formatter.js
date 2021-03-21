@@ -9,9 +9,9 @@ function pluralize(word, count) {
 function formatter(results) {
   let output = '\n';
 
-  Object.keys(results).forEach((file,index) => {
+  Object.keys(results).forEach((file, index) => {
     const resultValues = results[file];
-    
+
     output += `${chalk.underline(file)}\n`;
 
     output += `${table(
