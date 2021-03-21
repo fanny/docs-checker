@@ -19,9 +19,9 @@ function createHeadingHierarchy(tokens, root) {
     };
 
     if (token?.type === TOKENS_TYPE.HEADING_OPEN) {
-      if (getPrecedence(tokenRepresentation) < getPrecedence(topStackHeading)) {
+      if (getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading)) {
         while (
-          getPrecedence(tokenRepresentation) < getPrecedence(topStackHeading) &&
+          getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading) &&
           stack.length
         ) {
           topStackHeading = stack.pop();
@@ -38,7 +38,7 @@ function createHeadingHierarchy(tokens, root) {
   return rootCopy;
 }
 
-function createContext(tokens, frontMatter) {
+function createContext(tokens) {
   const rootSection = {
     hLevel: 'h1',
     node: {
@@ -50,13 +50,11 @@ function createContext(tokens, frontMatter) {
       level: 0,
       children: null,
       content: '',
-      markup: '##',
+      markup: '#',
       info: '',
       meta: null,
       block: true,
       hidden: false,
-      line: frontMatter[2],
-      lineNumber: 1,
     },
     children: [],
   };

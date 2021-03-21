@@ -1,6 +1,7 @@
 {
   "comment": "Rules for react website",
   "default": false,
+  "ignore-comment": "docs-checker",
   "rules": {
     "require-structure": {
       "structure": {

@@ -1,8 +1,3 @@
-const fs = require('fs');
-const path = require('path');
-
-const { createContext } = require(path.resolve(__dirname, '../parser'));
-
 function getTokensRegex(tokens) {
   return Object.entries(tokens).map(([key, value]) =>
     value === 'optional' ? `(${key})?` : key,
@@ -17,7 +12,7 @@ function getValidTokens(structure, hLevel) {
     ? tokens
         .map(getTokensRegex)
         .map((token) => token.join(''))
-        .join('|') // explain why
+        .join('|')
     : getTokensRegex(tokens).join('');
 }
 
@@ -37,9 +32,9 @@ function transverseTree(structure, currentNode, onError) {
 
     if (!tagsRepresentation.match(tokensRegex)) {
       onError({
-        lineNumber: currentNode.node.lineNumber,
+        lineNumber: currentNode.node.map[0],
         detail: 'Your section is not following the recommended structure',
-        context: currentNode.node.line.substr(0, 7),
+        context: currentNode.children[0].node.content,
       });
     }
   }
@@ -50,14 +45,12 @@ function transverseTree(structure, currentNode, onError) {
 }
 
 module.exports = {
-  names: ['require-structure'],
+  name: 'require-structure',
   description: 'Enforces the structure of a .md file',
   tags: ['md', 'structure'],
-  function: function rule(params, onError) {
-    const { config, tokens, lines, frontMatterLines } = params;
+  run: function rule(params, onError) {
+    const {context, config} = params;
     const { structure } = config || {};
-    const context = createContext(tokens, frontMatterLines);
-    console.log(`here: ${frontMatterLines}`);
     transverseTree(structure, context, onError);
   },
 };

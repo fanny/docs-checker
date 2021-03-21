@@ -11,9 +11,7 @@ function formatter(results) {
 
   Object.keys(results).forEach((file,index) => {
     const resultValues = results[file];
-    if(index == 0)
-      console.log(results[file])
-
+    
     output += `${chalk.underline(file)}\n`;
 
     output += `${table(
