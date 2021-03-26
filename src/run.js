@@ -15,7 +15,7 @@ function run(options) {
   });
 
   moenda.runRules();
-  console.log(moenda.getResults());
+  console.log(formatter(moenda.getResults()));
 }
 
 module.exports = {
