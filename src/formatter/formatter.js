@@ -1,49 +1,43 @@
-const fs = require('fs')
-const path = require('path')
-const chalk = require('chalk')
-const plur = require('plur')
-const logSymbols = require('log-symbols')
-const codeFrame = require('babel-code-frame')
+const fs = require('fs');
+const path = require('path');
+const chalk = require('chalk');
+const plur = require('plur');
+const logSymbols = require('log-symbols');
+const codeFrame = require('babel-code-frame');
 
+// Inspired by: https://github.com/adriantoine/eslint-codeframe-formatter
 function formatter(results) {
-  let errorCount = 0
-  let warningCount = 0
+  let errorCount = 0;
+  let warningCount = 0;
 
-  const filesOutput = results.map((result) => {
-    const fileContent = fs.readFileSync(result.filePath, 'utf8')
-    
-    const ruleId = chalk.dim(`(${result.ruleName})`)
+  const filesOutput = Object.keys(results).map((filePath) => {
+    const fileContent = fs.readFileSync(filePath, 'utf8');
 
-    let symbol = logSymbols.error
-    errorCount++
+    const output = results[filePath].map((result) => {
+      const ruleId = chalk.dim(`(${result.ruleName})`);
+      const symbol = logSymbols.error;
+      errorCount += 1;
 
-    return [
-      `  ${symbol} ${result.detail} ${ruleId}`,
-      `${codeFrame(fileContent, result.line, result.column)}`
-    ].join('\n')
+      return [
+        `  ${symbol} ${result.detail} ${ruleId}`,
+        `${codeFrame(fileContent, result.line, result.column)}`,
+      ].join('\n');
+    });
+    const filename = chalk.underline(path.relative('.', filePath));
+    return `  ${filename}\n\n${output.join('\n\n')}`;
+  });
 
-    //const filename = chalk.underline(path.relative('.', file))
+  let finalOutput = `${filesOutput.filter((s) => s).join('\n\n\n')}\n\n`;
+  finalOutput += `  ${chalk.red(
+    `${errorCount}  ${plur('error', errorCount)}`,
+  )}\n`;
+  finalOutput += `  ${chalk.yellow(
+    `${warningCount} ${plur('warning', warningCount)}`,
+  )}\n`;
 
-    //return `  ${filename}\n\n${messagesOutput.join('\n\n')}`
-  })
-
-
-  let finalOutput = `${filesOutput.filter(s => s).join('\n\n\n')}\n\n`
-
-  if (errorCount > 0) {
-    finalOutput += `  ${chalk.red(`${errorCount}  ${plur('error', errorCount)}`)}\n`
-  }
-
-  if (warningCount > 0) {
-    finalOutput += `  ${chalk.yellow(`${warningCount} ${plur('warning', warningCount)}`)}\n`
-  }
-
-  return (errorCount + warningCount) > 0 ? finalOutput : ''
+  return finalOutput;
 }
 
-  
-
-// use a formatter like that: https://github.com/adriantoine/eslint-codeframe-formatter#readme
 module.exports = {
   formatter,
 };
