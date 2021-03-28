@@ -3,6 +3,38 @@
   "default": false,
   "ignore-comment": "docs-checker",
   "rules": {
-    "require-structure": {}
+    "require-structure": {
+      "structure": {
+        "h1": {
+          "p": "required",
+          "h2": "required"
+        },
+        "h2": [
+          {
+            "p": "required",
+            "h4": "optional"
+          },
+          {
+            "h3": "optional"
+          }
+        ],
+        "h3": [
+          {
+            "p": "required",
+            "ul": "optional"
+          },
+          {
+            "p": "required",
+            "code": "optional",
+            "h4": "optional"
+          },
+          {
+            "code": "required",
+            "p": "required",
+            "h4": "optional"
+          }
+        ]
+      }
+    }
   }
 }

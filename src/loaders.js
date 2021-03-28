@@ -1,9 +1,18 @@
 const path = require('path');
 const fs = require('fs');
-const { merge } = require('lodash');
+const { mergeWith } = require('lodash');
 
 const CONFIG_FILENAME = 'config.json';
 const RULES_DIR = 'rules';
+
+function mergeCustomizer(objValue, srcValue) {
+  if (
+    Object.prototype.toString.call(objValue) === '[object Object]' &&
+    Object.keys(objValue).length !== Object.keys(srcValue).length
+  ) {
+    return srcValue;
+  }
+}
 
 function loadRuleConfigs(userRulesConfig) {
   const sourceConfig = require(path.resolve(
@@ -11,7 +20,11 @@ function loadRuleConfigs(userRulesConfig) {
     `../src/${CONFIG_FILENAME}`,
   ));
 
-  const rulesConfig = merge({}, sourceConfig.rules, userRulesConfig);
+  const rulesConfig = mergeWith(
+    sourceConfig.rules,
+    userRulesConfig,
+    mergeCustomizer,
+  );
   return rulesConfig;
 }
 
@@ -39,7 +52,6 @@ function loadConfigFileInAncestors(directoryPath, rootPath) {
   }
 }
 
-// TODO: Add validations
 function loadOptions(files, projectDir = process.cwd()) {
   const [filePath, _] = files;
   const docsPath = path.join(projectDir, path.dirname(filePath));
@@ -60,8 +72,6 @@ function loadOptions(files, projectDir = process.cwd()) {
   };
 }
 
-// normalizeConfigs: https://github.com/rome/tools/blob/main/internal/core/common/userConfig.ts
-// check if configs exist on file
 // supress lint https://github.com/rome/tools/blob/5c6e97043ad4d515d8a79a877c4641a95ca4867a/internal/compiler/suppressionsParser.ts#L265
 module.exports = {
   loadOptions,

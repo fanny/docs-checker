@@ -50,7 +50,7 @@ module.exports = {
   description: 'Enforces the structure of a .md file',
   tags: ['md', 'structure'],
   run: function rule(params, onError) {
-    const {context, config} = params;
+    const { context, config } = params;
     transverseTree(config.structure, context, onError);
   },
 };
