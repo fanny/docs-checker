@@ -1,5 +1,5 @@
 {
-  "name": "@fanny/docs-checker",
+  "name": "docs-checker",
   "version": "0.0.1",
   "description": "A lint for API docs",
   "main": "src/index.js",
@@ -21,6 +21,7 @@
   "engines": {
     "node": ">=14.0.0"
   },
+  "enginesStrict": true,
   "dependencies": {
     "@babel/core": "^7.10.5",
     "@babel/node": "^7.10.5",
