@@ -1,5 +1,8 @@
 const path = require('path');
-const { TOKENS_TYPE } = require(path.resolve(__dirname, './constants.js'));
+const { TOKENS_TYPE, SUPPRESS_COMMENT_PATTERN } = require(path.resolve(
+  __dirname,
+  './constants.js',
+));
 
 function getPrecedence(node) {
   return parseInt(node.hLevel.slice(-1)[0]);
@@ -9,8 +12,9 @@ function createHeadingHierarchy(tokens, root) {
   const rootCopy = Object.assign({}, root);
   const stack = [rootCopy];
   let topStackHeading = stack[0];
+  let isSectionDisabled = false;
 
-  tokens.forEach((token) => {
+  tokens.forEach((token, index) => {
     const tokenRepresentation = {
       hLevel: token?.type === TOKENS_TYPE.HEADING_OPEN ? token.tag : null,
       node: token,
@@ -19,21 +23,34 @@ function createHeadingHierarchy(tokens, root) {
 
     if (token?.type === TOKENS_TYPE.HEADING_OPEN) {
       if (
-        getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading)
+        index !== 0 &&
+        tokens[index - 1].content.match(SUPPRESS_COMMENT_PATTERN) === null
       ) {
-        while (
-          getPrecedence(tokenRepresentation) <=
-            getPrecedence(topStackHeading) &&
-          stack.length
-        ) {
-          topStackHeading = stack.pop();
-        }
+        isSectionDisabled = false;
       }
-      topStackHeading.children.push(tokenRepresentation);
-      stack.push(...[topStackHeading, tokenRepresentation]);
-      topStackHeading = tokenRepresentation;
+      if (!isSectionDisabled) {
+        if (
+          getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading)
+        ) {
+          while (
+            getPrecedence(tokenRepresentation) <=
+              getPrecedence(topStackHeading) &&
+            stack.length
+          ) {
+            topStackHeading = stack.pop();
+          }
+        }
+        topStackHeading.children.push(tokenRepresentation);
+        stack.push(...[topStackHeading, tokenRepresentation]);
+        topStackHeading = tokenRepresentation;
+      }
     } else {
-      topStackHeading.children.push(tokenRepresentation);
+      if (token.content.match(SUPPRESS_COMMENT_PATTERN) != null) {
+        isSectionDisabled = true;
+      }
+
+      if (!isSectionDisabled)
+        topStackHeading.children.push(tokenRepresentation);
     }
   });
 
