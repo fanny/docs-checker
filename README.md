@@ -5,8 +5,8 @@
 `docs-checker` is a tool for identifying markdown documentation structures and verifying that they follow the same pattern provided by the user. Curious to know how?
 
 - docs-checker uses [`markdown-it`](https://github.com/markdown-it/markdown-it) for markdown analysis
-- docs-checker uses an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) with regex to evaluate standards in the documentation structure
-- docs-checker uses [`moenda`](https://github.com/SPLAB-UFCG/Moenda) the engine responsible for executing the rules.
+- docs-checker uses an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) with regex to evaluate patterns in the documentation structure
+- docs-checker uses [`moenda`](https://github.com/SPLAB-UFCG/Moenda) an engine responsible for executing the rules.
 
 `docs-checker` is also flexible, so if you want to create your custom rule, follow [this guide](#custom-rules).
 
@@ -79,11 +79,10 @@ module.exports = {
     }
 };
 ```
-- `name` - The rule name. This is used as an identifier to configure docs-checker on the command line
-- `tags` - A human readable list of tags that help others users to identify what this rule is about.
+- `name` - The rule name. This is used as an identifier to configure docs-checker on the command line.
+- `tags` - A human readable list of tags that help other users to identify what this rule is about.
 - `description` - A human readable description for the rule. This is used in the cli to describe the rule.
-- `run` - The one method is run(), which sets up the rule. This method is passed in two arguments, `params` and a reporter function.
-`params` contains two objects, `context` and `rule configs`. The context object contains additional functionality that is helpful for rules to do their jobs, is a result of parser processing while the rule configs are the configs provided by the user using `config.json` file. The `reporter` is a function used to report a problem in the structure.
+- `run` - The one method is run(), which sets up the rule. This method is passed with two arguments, `params` and a `reporter` function. `params` includes two objects, context and rule configs. The `context` object contains additional functionalities that is helpful for rules to do their jobs, is a result of `parser` processing while the rule configs are the configs provided by the user using `config.json` file. The `reporter` is a function used to report a problem in the structure.
 
 After define your custom rule you'll need to define where those rules are located in your `config.json` file
 
