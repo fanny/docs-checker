@@ -13,6 +13,7 @@ function run(options) {
 
   moenda.runRules();
   console.log(formatter(moenda.getResults()));
+  process.exit();
 }
 
 module.exports = {
