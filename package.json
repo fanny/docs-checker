@@ -26,9 +26,12 @@
     "@babel/core": "^7.10.5",
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
+    "babel-code-frame": "^6.11.0",
     "chalk": "^4.1.0",
     "globby": "^11.0.1",
+    "log-symbols": "^1.0.2",
     "markdownlint-rule-helpers": "^0.11.0",
+    "plur": "^2.1.2",
     "strip-ansi": "^6.0.0",
     "text-table": "^0.2.0"
   }
