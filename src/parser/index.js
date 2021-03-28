@@ -1,3 +1,6 @@
+const path = require('path');
+const { TOKENS_TYPE } = require(path.resolve(__dirname, './constants.js'));
+
 function getPrecedence(node) {
   return parseInt(node.hLevel.slice(-1)[0]);
 }
@@ -9,12 +12,12 @@ function createHeadingHierarchy(tokens, root) {
 
   tokens.forEach((token) => {
     const tokenRepresentation = {
-      hLevel: token?.type === 'heading_open' ? token.tag : null,
+      hLevel: token?.type === TOKENS_TYPE.HEADING_OPEN ? token.tag : null,
       node: token,
       children: [],
     };
 
-    if (token?.type === 'heading_open') {
+    if (token?.type === TOKENS_TYPE.HEADING_OPEN) {
       if (
         getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading)
       ) {
@@ -41,7 +44,7 @@ function createContext(tokens) {
   const rootSection = {
     hLevel: 'h1',
     node: {
-      type: 'heading_open',
+      type: TOKENS_TYPE.HEADING_OPEN,
       tag: 'h1',
       attrs: null,
       map: [1],
@@ -54,8 +57,6 @@ function createContext(tokens) {
       meta: null,
       block: true,
       hidden: false,
-      line: 'a',
-      lineNumber: 1,
     },
     children: [],
   };
