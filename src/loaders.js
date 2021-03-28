@@ -11,7 +11,7 @@ function loadRuleConfigs(userRulesConfig) {
     `../src/${CONFIG_FILENAME}`,
   ));
 
-  const rulesConfig = merge(userRulesConfig.rules, sourceConfig.rules);
+  const rulesConfig = merge({}, sourceConfig.rules, userRulesConfig);
   return rulesConfig;
 }
 

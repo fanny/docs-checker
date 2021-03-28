@@ -33,7 +33,7 @@ function transverseTree(structure, currentNode, onError) {
     if (!tagsRepresentation.match(tokensRegex)) {
       onError({
         line: currentNode.node.map[0],
-        detail: 'Your section is not following the recommended structure',
+        detail: `Actual: ${tagsRepresentation}, Expected: ${tokensRegex}`,
         context: currentNode.children[0].node.content,
         severity: SEVERITY_ERROR,
       });

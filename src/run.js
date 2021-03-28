@@ -3,7 +3,7 @@ const {Moenda} = require(path.resolve(
   __dirname,
   '../node_modules/Moenda/Moenda',
 ))
-const { formatter } = require('../bin/formatter.js');
+const { formatter } = require('./formatter/formatter.js');
 
 function run(options) {
   const moenda = new Moenda({
