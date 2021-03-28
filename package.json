@@ -1,9 +1,23 @@
 {
   "name": "docs-checker",
   "version": "0.0.1",
-  "description": "A lint for API docs",
+  "description": "A checker for documentation structures",
   "main": "src/index.js",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fanny/docs-checker"
+  },
+  "keywords": [
+    "documentation",
+    "structure",
+    "static site generators",
+    "markdown"
+  ],
+  "bugs": {
+    "url": "https://github.com/fanny/docs-checker/issues"
+  },
+  "homepage": "https://github.com/fanny/docs-checker#readme",
   "devDependencies": {
     "commander": "^5.1.0",
     "lodash.merge": "^4.6.2",
@@ -18,10 +32,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "enginesStrict": true,
   "dependencies": {
     "@babel/core": "^7.10.5",
     "@babel/node": "^7.10.5",
@@ -35,5 +45,9 @@
     "plur": "^2.1.2",
     "strip-ansi": "^6.0.0",
     "text-table": "^0.2.0"
-  }
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "enginesStrict": true
 }
