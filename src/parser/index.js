@@ -1,5 +1,5 @@
 const path = require('path');
-const { TOKENS_TYPE, SUPPRESS_COMMENT_PATTERN } = require(path.resolve(
+const { TOKENS_TYPE } = require(path.resolve(
   __dirname,
   './constants.js',
 ));
@@ -12,9 +12,8 @@ function createHeadingHierarchy(tokens, root) {
   const rootCopy = Object.assign({}, root);
   const stack = [rootCopy];
   let topStackHeading = stack[0];
-  let isSectionDisabled = false;
 
-  tokens.forEach((token, index) => {
+  tokens.forEach((token) => {
     const tokenRepresentation = {
       hLevel: token?.type === TOKENS_TYPE.HEADING_OPEN ? token.tag : null,
       node: token,
@@ -23,34 +22,21 @@ function createHeadingHierarchy(tokens, root) {
 
     if (token?.type === TOKENS_TYPE.HEADING_OPEN) {
       if (
-        index !== 0 &&
-        tokens[index - 1].content.match(SUPPRESS_COMMENT_PATTERN) === null
+        getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading)
       ) {
-        isSectionDisabled = false;
-      }
-      if (!isSectionDisabled) {
-        if (
-          getPrecedence(tokenRepresentation) <= getPrecedence(topStackHeading)
+        while (
+          getPrecedence(tokenRepresentation) <=
+            getPrecedence(topStackHeading) &&
+          stack.length
         ) {
-          while (
-            getPrecedence(tokenRepresentation) <=
-              getPrecedence(topStackHeading) &&
-            stack.length
-          ) {
-            topStackHeading = stack.pop();
-          }
+          topStackHeading = stack.pop();
         }
-        topStackHeading.children.push(tokenRepresentation);
-        stack.push(...[topStackHeading, tokenRepresentation]);
-        topStackHeading = tokenRepresentation;
       }
+      topStackHeading.children.push(tokenRepresentation);
+      stack.push(...[topStackHeading, tokenRepresentation]);
+      topStackHeading = tokenRepresentation;
     } else {
-      if (token.content.match(SUPPRESS_COMMENT_PATTERN) != null) {
-        isSectionDisabled = true;
-      }
-
-      if (!isSectionDisabled)
-        topStackHeading.children.push(tokenRepresentation);
+      topStackHeading.children.push(tokenRepresentation);
     }
   });
 

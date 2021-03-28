@@ -27,13 +27,14 @@ function formatter(results) {
     return `  ${filename}\n\n${output.join('\n\n')}`;
   });
 
-  let finalOutput = `${filesOutput.filter((s) => s).join('\n\n\n')}\n\n`;
-  finalOutput += `  ${chalk.red(
-    `${errorCount}  ${plur('error', errorCount)}`,
-  )}\n`;
-  finalOutput += `  ${chalk.yellow(
-    `${warningCount} ${plur('warning', warningCount)}`,
-  )}\n`;
+  const finalOutput = 
+    `${filesOutput.filter((s) => s).join('\n\n\n')}\n
+      ${chalk.red(
+        `${errorCount}  ${plur('error', errorCount)}`,
+      )}
+      ${chalk.yellow(
+        `${warningCount} ${plur('warning', warningCount)}`,
+      )}\n`;
 
   return finalOutput;
 }
