@@ -8,7 +8,7 @@
 - docs-checker uses an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) with regex to evaluate standards in the documentation structure
 - docs-checker uses [`moenda`](https://github.com/SPLAB-UFCG/Moenda) the engine responsible for executing the rules.
 
-docs-checker is also flexible, so if you want to create your custom rule, follow [this tutorial](#custom-rules).
+`docs-checker` is also flexible, so if you want to create your custom rule, follow [this guide](#custom-rules).
 
 
 ## Installation and Usage
@@ -19,11 +19,11 @@ docs-checker is also flexible, so if you want to create your custom rule, follow
 
 You can install docs-checker using npm:
 
-`npm install docs-checker`
+`$ npm install docs-checker`
 
 Then you will be able to use the package running the following command:
 
-`docs-checker run <files.md>`
+`$ ./node_modules/.bin/docs-checker run <files.md>`
 
 You'll get an output similar to that:
 
