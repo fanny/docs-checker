@@ -89,7 +89,7 @@ After define your custom rule you'll need to define where those rules are locate
 
 ```json
 {
-    "custom-rules": "path/to/my-rules-module"
+    "custom-rules": "path/to/my-rules-module",
     "rules": {
         "require-structure": {
             "h1": {"p": "required"},
