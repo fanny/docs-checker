@@ -1,6 +1,6 @@
 {
   "name": "docs-checker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A checker for documentation structures",
   "main": "src/index.js",
   "license": "MIT",
