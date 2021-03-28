@@ -1,8 +1,5 @@
 const path = require('path');
-const {Moenda} = require(path.resolve(
-  __dirname,
-  '../node_modules/Moenda/Moenda',
-))
+const { Moenda } = require('moenda');
 const { formatter } = require('./formatter/formatter.js');
 
 function run(options) {
