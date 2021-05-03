@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const { mergeWith } = require('lodash');
+const mergeWith = require('lodash/mergeWith');
 
 const CONFIG_FILENAME = 'config.json';
 const RULES_DIR = 'rules';
@@ -72,7 +72,6 @@ function loadOptions(files, projectDir = process.cwd()) {
   };
 }
 
-// supress lint https://github.com/rome/tools/blob/5c6e97043ad4d515d8a79a877c4641a95ca4867a/internal/compiler/suppressionsParser.ts#L265
 module.exports = {
   loadOptions,
 };
