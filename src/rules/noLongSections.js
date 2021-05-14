@@ -1,7 +1,5 @@
 const path = require('path');
 
-const { createContext } = require(path.resolve(__dirname, '../parser'));
-
 const WORDS_PER_MINUTE = 275;
 
 function transverseTree(currentNode, onError) {
@@ -16,10 +14,11 @@ function transverseTree(currentNode, onError) {
     const estimatedTime = wordCount / WORDS_PER_MINUTE;
     if (estimatedTime > 7) {
       onError({
-        lineNumber: node.lineNumber,
+        line: currentNode.node.map[0],
         detail:
           'Long section, consider it break in more sections or include a visual element',
-        context: node.line.substr(0, 7),
+        context: currentNode.children[0].node.content,
+        severity: 2,
       });
     }
   }
@@ -31,12 +30,11 @@ function transverseTree(currentNode, onError) {
 }
 
 module.exports = {
-  names: ['no-long-sections'],
+  name: ['no-long-sections'],
   description: 'Prevent sections to take more than 7 minutes to read',
   tags: ['time', 'reading', 'md'],
-  function: function rule(params, onError) {
-    const { tokens, frontMatterLines } = params;
-    const context = createContext(tokens, frontMatterLines);
+  run: function rule(params, onError) {
+    const { context } = params;
     transverseTree(context, onError);
   },
 };
