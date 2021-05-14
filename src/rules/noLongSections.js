@@ -6,7 +6,7 @@ function transverseTree(currentNode, onError) {
   const { children, hLevel, node } = currentNode;
   const textSection = children
     .filter((child) => child.node.type === 'paragraph_open')
-    .map((child) => child.node.line)
+    .map((child) => child.node.content)
     .join('\n');
 
   if (textSection) {
